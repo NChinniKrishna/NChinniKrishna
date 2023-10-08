@@ -1,0 +1,62 @@
+### Hi there 👋
+
+<!--
+**NChinniKrishna/NChinniKrishna** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+
+Here are some ideas to get you started:
+
+- 🔭 I’m currently working on ...
+- 🌱 I’m currently learning ...
+- 👯 I’m looking to collaborate on ...
+- 🤔 I’m looking for help with ...
+- 💬 Ask me about ...
+- 📫 How to reach me: ...
+- 😄 Pronouns: ...
+- ⚡ Fun fact: ...
+-->
+<html>
+<head>
+    <title>Content Management</title>
+</head>
+<style>
+body {
+  background-image: url('https://t3.ftcdn.net/jpg/05/28/86/66/360_F_528866602_aiVwnOnkooTrqo3MgicCf83SVVzt1Gnd.jpg');
+  background-repeat:repeat-xy;
+  background-size:cover;
+}
+</style>
+<body>
+    <center><h1>Upload a Multimedia File</h1>
+    <input type="file" id="fileInput" accept=".mp4, .mp3, .jpg, .png, .pdf">
+    <button onclick="uploadFile()">Upload</button> </center>
+
+    <center><h2>You Download Files Here</h2></center>
+<br/>    
+	<ul id="fileList">
+        <!-- File list will be displayed here -->
+    </ul>
+
+    <script>
+        // Function to upload a file
+        function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const fileList = document.getElementById('fileList');
+            const file = fileInput.files[0];
+
+            if (file) {
+                const listItem = document.createElement('li');
+                const downloadLink = document.createElement('a');
+                downloadLink.href = URL.createObjectURL(file);
+                downloadLink.download = file.name;
+                downloadLink.textContent = file.name;
+
+                listItem.appendChild(downloadLink);
+                fileList.appendChild(listItem);
+
+                // Clear the file input
+                fileInput.value = '';
+            }
+        }
+    </script>
+</body>
+</html>
