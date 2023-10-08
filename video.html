@@ -1,0 +1,99 @@
+### Hi there 👋
+
+<!--
+**NChinniKrishna/NChinniKrishna** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+
+Here are some ideas to get you started:
+
+- 🔭 I’m currently working on ...
+- 🌱 I’m currently learning ...
+- 👯 I’m looking to collaborate on ...
+- 🤔 I’m looking for help with ...
+- 💬 Ask me about ...
+- 📫 How to reach me: ...
+- 😄 Pronouns: ...
+- ⚡ Fun fact: ...
+-->
+<html>
+<head>
+    
+    <title>MY MEETING</title>
+</head>
+<style>
+body {
+  background-image: url('https://media.licdn.com/dms/image/C4E12AQHZYUCYF6UbHQ/article-cover_image-shrink_720_1280/0/1613408160646?e=2147483647&v=beta&t=6VYK8rVzgiBLmtkN96j3nocYNX9-aS8kicgWiSN37fc');
+  background-repeat:no-repeat;
+  background-size:100%;
+}
+</style>
+<body>
+    <center><h1 style="color:red">VIDEO CONFRENCING</h1></center>
+    <video id="localVideo" autoplay muted></video>
+    <div id="remoteVideos"></div>
+    <center><button id="startButton">Join Room</button>
+    <button id="hangupButton">Leave Room</button></center>
+
+    <script>
+        const localVideo = document.getElementById('localVideo');
+        const remoteVideos = document.getElementById('remoteVideos');
+        const startButton = document.getElementById('startButton');
+        const hangupButton = document.getElementById('hangupButton');
+        let localStream;
+        const peerConnections = {};
+
+        // Function to start the video call in a room
+        async function joinRoom(roomName) {
+            try {
+                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                localVideo.srcObject = localStream;
+
+                // Create a connection for the room
+                const peerConnection = new RTCPeerConnection();
+
+                // Add local stream to the connection
+                localStream.getTracks().forEach(track => {
+                    peerConnection.addTrack(track, localStream);
+                });
+
+                // Handle remote stream
+                peerConnection.ontrack = event => {
+                    const remoteVideo = document.createElement('video');
+                    remoteVideo.srcObject = event.streams[0];
+                    remoteVideo.autoplay = true;
+                    remoteVideos.appendChild(remoteVideo);
+                };
+
+                // Handle ICE candidate exchange, SDP offer/answer, and other WebRTC logic here.
+
+                peerConnections[roomName] = peerConnection;
+
+            } catch (error) {
+                console.error('Error joining room:', error);
+            }
+        }
+
+        // Function to leave the room
+        function leaveRoom(roomName) {
+            // Close the peer connection and release resources
+            peerConnections[roomName].close();
+            delete peerConnections[roomName];
+            localStream.getTracks().forEach(track => track.stop());
+            localVideo.srcObject = null;
+        }
+
+        startButton.addEventListener('click', () => {
+            const roomName = prompt('Enter a room name:');
+            if (roomName) {
+                joinRoom(roomName);
+            }
+        });
+
+        hangupButton.addEventListener('click', () => {
+            const roomName = prompt('Enter the room name to leave:');
+            if (roomName && peerConnections[roomName]) {
+                leaveRoom(roomName);
+            }
+        });
+    </script>
+</body>
+</html>
